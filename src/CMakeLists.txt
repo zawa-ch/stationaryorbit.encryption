@@ -15,3 +15,8 @@
 # along with this program.
 # If not, see <http://www.gnu.org/licenses/>.
 #
+
+add_library(stationaryorbit.encryption SHARED
+    ${Include_Dir}/stationaryorbit/encryption.cipher.hpp
+    arcfour.cpp
+)
