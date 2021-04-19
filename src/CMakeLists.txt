@@ -1,4 +1,4 @@
-# stationaryorbit.encryption:/.gitignore
+# stationaryorbit.encryption:/src/CMakeLists.txt
 # Copyright 2021 zawa-ch.
 # GPLv3 (or later) license
 #
@@ -15,5 +15,3 @@
 # along with this program.
 # If not, see <http://www.gnu.org/licenses/>.
 #
-
-[Bb]uild/
