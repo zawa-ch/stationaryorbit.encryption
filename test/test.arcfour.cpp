@@ -23,7 +23,7 @@
 using namespace zawa_ch::StationaryOrbit;
 using namespace zawa_ch::StationaryOrbit::Encryption;
 
-constexpr int check_if(bool condition)
+int check_if(bool condition)
 {
 	if (condition)
 	{
@@ -188,7 +188,7 @@ std::array<std::function<int(void)>, 7> tests =
 	[]()
 	{
 		std::cout << "1. Type ArcFourGenerator meets the traits Iterator?";
-		return check_if(IteratorTraits::IsIterator<ArcFourGenerator>);
+		return check_if(IteratorTraits::is_iterator<ArcFourGenerator>);
 	},
 	[]()
 	{
