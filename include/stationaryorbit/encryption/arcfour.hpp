@@ -34,7 +34,12 @@ namespace zawa_ch::StationaryOrbit::Encryption
 		size_t j;
 		std::byte c;
 	public:
-		constexpr ArcFourGenerator(const std::vector<std::byte>& key) : s(initialize_sbox(key)), i(0), j(0), c()
+		ArcFourGenerator(const std::vector<std::byte>& key) : s(initialize_sbox(key)), i(0), j(0), c()
+		{
+			Next();
+		}
+		template<size_t N>
+		constexpr ArcFourGenerator(const std::array<std::byte, N>& key) : s(initialize_sbox(key)), i(0), j(0), c()
 		{
 			Next();
 		}
@@ -69,7 +74,7 @@ namespace zawa_ch::StationaryOrbit::Encryption
 			}
 			return result;
 		}
-		[[nodiscard]] static constexpr std::array<std::byte, 256> construct_key(const std::vector<std::byte>& key)
+		[[nodiscard]] static std::array<std::byte, 256> construct_key(const std::vector<std::byte>& key)
 		{
 			auto result = std::array<std::byte, 256>();
 			size_t n = 0;
@@ -81,9 +86,39 @@ namespace zawa_ch::StationaryOrbit::Encryption
 			}
 			return result;
 		}
-		[[nodiscard]] static constexpr std::array<std::byte, 256> initialize_sbox(const std::vector<std::byte>& key)
+		template<size_t N>
+		[[nodiscard]] static constexpr std::array<std::byte, 256> construct_key(const std::array<std::byte, N>& key)
+		{
+			auto result = std::array<std::byte, 256>();
+			size_t n = 0;
+			size_t l = key.size();
+			for(auto& i: result)
+			{
+				i = key[n % l];
+				++n;
+			}
+			return result;
+		}
+		[[nodiscard]] static std::array<std::byte, 256> initialize_sbox(const std::vector<std::byte>& key)
 		{
 			if ((key.size() * 8) < 40) { throw std::invalid_argument("invalid key length"); }
+			auto result = construct_sbox();
+			auto skey = construct_key(key);
+			size_t j = 0;
+			auto r = Range<size_t>(0, 256);
+			for(auto i: r.get_std_iterator())
+			{
+				j = (j + size_t(result[i]) + size_t(skey[i])) % 256;
+				auto t = result[j];
+				result[j] = result[i];
+				result[i] = t;
+			}
+			return result;
+		}
+		template<size_t N>
+		[[nodiscard]] static constexpr std::array<std::byte, 256> initialize_sbox(const std::array<std::byte, N>& key)
+		{
+			static_assert((N * 8) < 40, "invalid key length");
 			auto result = construct_sbox();
 			auto skey = construct_key(key);
 			size_t j = 0;
