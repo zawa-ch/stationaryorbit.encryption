@@ -36,17 +36,17 @@ namespace zawa_ch::StationaryOrbit::Encryption
 	public:
 		ArcFourGenerator(const std::vector<std::byte>& key) : s(initialize_sbox(key)), i(0), j(0), c()
 		{
-			Next();
+			next();
 		}
 		template<size_t N>
 		constexpr ArcFourGenerator(const std::array<std::byte, N>& key) : s(initialize_sbox(key)), i(0), j(0), c()
 		{
-			Next();
+			next();
 		}
 
-		[[nodiscard]] constexpr bool HasValue() const noexcept { return std::true_type::value; }
-		[[nodiscard]] constexpr const ValueType& Current() const noexcept { return c; }
-		constexpr bool Next() noexcept
+		[[nodiscard]] constexpr bool has_value() const noexcept { return std::true_type::value; }
+		[[nodiscard]] constexpr const ValueType& current() const noexcept { return c; }
+		constexpr bool next() noexcept
 		{
 			i = (i + 1) % 256;
 			j = (j + size_t(s[i])) % 256;
@@ -56,12 +56,12 @@ namespace zawa_ch::StationaryOrbit::Encryption
 			c = s[(size_t(s[i]) + size_t(s[j])) % 256];
 			return std::true_type::value;
 		}
-		[[nodiscard]] bool Equals(const ArcFourGenerator& other) const noexcept
+		[[nodiscard]] bool equals(const ArcFourGenerator& other) const noexcept
 		{
 			return (s == other.s) && (i == other.i) && (j == other.j) && (c == other.c);
 		}
-		[[nodiscard]] bool operator==(const ArcFourGenerator& other) const noexcept { return Equals(other); }
-		[[nodiscard]] bool operator!=(const ArcFourGenerator& other) const noexcept { return !Equals(other); }
+		[[nodiscard]] bool operator==(const ArcFourGenerator& other) const noexcept { return equals(other); }
+		[[nodiscard]] bool operator!=(const ArcFourGenerator& other) const noexcept { return !equals(other); }
 	private:
 		[[nodiscard]] static constexpr std::array<std::byte, 256> construct_sbox()
 		{
@@ -145,8 +145,8 @@ namespace zawa_ch::StationaryOrbit::Encryption
 		[[nodiscard]] constexpr const ArcFourGenerator& get_generator() const noexcept { return generator; }
 		[[nodiscard]] constexpr DataType encrypt(const DataType& data)
 		{
-			auto result = data ^ generator.Current();
-			generator.Next();
+			auto result = data ^ generator.current();
+			generator.next();
 			return result;
 		}
 	};
@@ -162,8 +162,8 @@ namespace zawa_ch::StationaryOrbit::Encryption
 		[[nodiscard]] constexpr const ArcFourGenerator& get_generator() const noexcept { return generator; }
 		[[nodiscard]] constexpr DataType decrypt(const DataType& data)
 		{
-			auto result = data ^ generator.Current();
-			generator.Next();
+			auto result = data ^ generator.current();
+			generator.next();
 			return result;
 		}
 	};

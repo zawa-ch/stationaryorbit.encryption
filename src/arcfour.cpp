@@ -18,4 +18,4 @@
 //
 #include "stationaryorbit/encryption/arcfour.hpp"
 
-static_assert(zawa_ch::StationaryOrbit::IteratorTraits::IsIterator<zawa_ch::StationaryOrbit::Encryption::ArcFourGenerator>, "zawa_ch::StationaryOrbit::Encryption::ArcFourGenerator は zawa_ch::StationaryOrbit::IteratorTraits::IsIterator の要件を満たしませんでした。");
+static_assert(zawa_ch::StationaryOrbit::IteratorTraits::is_iterator<zawa_ch::StationaryOrbit::Encryption::ArcFourGenerator>, "zawa_ch::StationaryOrbit::Encryption::ArcFourGenerator は zawa_ch::StationaryOrbit::IteratorTraits::is_iterator の要件を満たしませんでした。");
