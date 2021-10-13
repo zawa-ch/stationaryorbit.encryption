@@ -88,7 +88,7 @@ namespace zawa_ch::StationaryOrbit::Encryption
 			auto skey = construct_key(key);
 			size_t j = 0;
 			auto r = Range<size_t>(0, 256);
-			for(auto i: r.GetStdIterator())
+			for(auto i: r.get_std_iterator())
 			{
 				j = (j + size_t(result[i]) + size_t(skey[i])) % 256;
 				auto t = result[j];
